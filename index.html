@@ -1,0 +1,76 @@
+<html>
+<head>
+<title>Floor Plan Login</title>
+<script>
+const login = async (e) =>
+{
+	e.preventDefault()
+	const lerror = document.querySelector('#lerror')
+	lerror.hidden = true
+	
+	const luser = document.querySelector('#luser')
+	const lpass = document.querySelector('#lpass')
+	
+	const resp = await fetch(`auth?username=${luser.value}&password=${lpass.value}`)
+	const data = await resp.text()
+	
+	if(!resp.ok)
+	{
+		lerror.innerText = data
+		lerror.hidden = false
+	}
+	else
+	{
+		const token = JSON.parse(atob(data.split('.')[1]))
+		const exp = new Date(0)
+		exp.setUTCSeconds(token.exp)
+		document.cookie += `TOKEN=${data}; SameSite=strict; Domain=localhost; Expires=${exp}`
+		const wrapper = document.querySelector('#wrapper')
+		wrapper.innerText = 'logged in';
+	}
+}
+const register = async (e) =>
+{
+	e.preventDefault()
+	const cerror = document.querySelector('#cerror')
+	cerror.hidden = true
+	
+	const cuser = document.querySelector('#cuser')
+	const cpass = document.querySelector('#cpass')
+	
+	const resp = await fetch(`create?username=${cuser.value}&password=${cpass.value}`)
+	const data = await resp.text()
+	
+	if(!resp.ok)
+	{
+		cerror.innerText = data
+		cerror.hidden = false
+	}
+	else
+	{
+		const wrapper = document.querySelector('#wrapper')
+		wrapper.innerText = 'registered';
+	}
+}
+</script>
+</head>
+<body>
+<div id="wrapper">
+<form action="" onsubmit="login(event)">
+<p>Login</p>
+<input id="luser" type="text"></input>
+<input id="lpass" type="password"></input>
+<button type="submit">Submit</button>
+<p id="lerror" hidden style="color:red;"></p>
+</form>
+
+<form action="" onsubmit="register(event)">
+<p>Create Account</p>
+<input id="cuser" type="text"></input>
+<input id="cpass" type="password"></input>
+<button type="submit">Submit</button>
+<p id="cerror" hidden style="color:red;"></p>
+</form>
+</div>
+</body>
+</html>
