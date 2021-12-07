@@ -7,13 +7,13 @@ const login = async (e) =>
 	e.preventDefault()
 	const lerror = document.querySelector('#lerror')
 	lerror.hidden = true
-	
+
 	const luser = document.querySelector('#luser')
 	const lpass = document.querySelector('#lpass')
-	
+
 	const resp = await fetch(`auth?username=${luser.value}&password=${lpass.value}`)
 	const data = await resp.text()
-	
+
 	if(!resp.ok)
 	{
 		lerror.innerText = data
@@ -34,13 +34,13 @@ const register = async (e) =>
 	e.preventDefault()
 	const cerror = document.querySelector('#cerror')
 	cerror.hidden = true
-	
+
 	const cuser = document.querySelector('#cuser')
 	const cpass = document.querySelector('#cpass')
-	
+
 	const resp = await fetch(`create?username=${cuser.value}&password=${cpass.value}`)
 	const data = await resp.text()
-	
+
 	if(!resp.ok)
 	{
 		cerror.innerText = data
@@ -52,6 +52,11 @@ const register = async (e) =>
 		wrapper.innerText = 'registered';
 	}
 }
+
+const logout = (e) => {
+	document.cookie += '; max-age=0'
+}
+
 </script>
 </head>
 <body>
@@ -70,6 +75,10 @@ const register = async (e) =>
 <input id="cpass" type="password"></input>
 <button type="submit">Submit</button>
 <p id="cerror" hidden style="color:red;"></p>
+</form>
+
+<form action="" onsubmit="logout(event)">
+<button type="submit">Logout</button>
 </form>
 </div>
 </body>
